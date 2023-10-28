@@ -9,18 +9,6 @@ import { getCoins } from '../services/request';
 const HomeScreen = () => {
 
   const { navigate } = useNavigation();
-
-  // const [data, setData] = useState(null)
-
-  // useEffect(() => {
-  //   getCoinsData();
-  // }, [])
-
-  // const getCoinsData = async () => {
-  //   const response = await getCoins();
-  //   setData(response)
-  // }
-
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#121212' }}>
       <FlatList

@@ -1,15 +1,34 @@
-import { View, Text, Image } from 'react-native'
-import React from 'react'
+import { View, Text, Image, Dimensions } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import { AntDesign } from '@expo/vector-icons';
 import SafeAreaView from 'react-native-safe-area-view';
+import { LineChartProvider, LineChart } from 'react-native-wagmi-charts';
+import { getCoinMarketChart } from '../services/request';
 
+export const { width: SIZE } = Dimensions.get('window');
 
 const CoinItem = ({ marketCoin }) => {
 
-  const { image, name, symbol, market_cap_rank, price_change_percentage_24h, current_price, market_cap } = marketCoin
+  const { id, name, symbol, current_price, image, market_cap_rank, price_change_percentage_24h, market_cap } = marketCoin
+
+  const [coinMarketData, setCoinMarketData] = useState(null);
+  
+  useEffect(() => {
+    fetchedCoinMarketData(id)
+  }, [])
+
+  const fetchedCoinMarketData = async (id) => {
+    const response = await getCoinMarketChart(id);
+    if (response) {
+      setCoinMarketData(response)
+    }
+  }
+
 
   return (
+
     <View style={{ flex: 1, backgroundColor: 'black' }}>
+
       <View style={{ borderBottomWidth: .4, borderColor: 'white', padding: 5, flexDirection: 'row', justifyContent: 'space-between' }}>
         <View style={{ flexDirection: 'row' }}>
           <View style={{ alignSelf: 'center', justifyContent: 'center', padding: 5 }}>
@@ -28,16 +47,27 @@ const CoinItem = ({ marketCoin }) => {
                   <Text style={{ fontSize: 12, color: price_change_percentage_24h < 0 ? 'red' : 'green' }}>{price_change_percentage_24h}</Text>
                 </View>
               </View>
-
             </View>
           </View>
         </View>
-        <View style={{}}>
-          <Text style={{ color: 'white' , fontWeight:'bold' }}>{current_price}</Text>
-          <Text style={{ color: 'white' , fontSize:10 }}>MCAP  {market_cap}</Text>
+        <View>
+          {
+            coinMarketData ? (
+              <LineChartProvider data={coinMarketData?.prices?.map(([timestamp, value]) => ({ timestamp, value }))}>
+                <LineChart height={SIZE * .1} width={SIZE * .2} >
+                  <LineChart.Path color='green' />
+                </LineChart>
+              </LineChartProvider>
+            ) : null
+          }
+        </View>
+        <View>
+          <Text style={{ color: 'white', fontWeight: 'bold' }}>{current_price}</Text>
+          <Text style={{ color: 'white', fontSize: 10 }}>MCAP  {market_cap}</Text>
         </View>
       </View>
-    </View>
+
+    </View >
   )
 }
 

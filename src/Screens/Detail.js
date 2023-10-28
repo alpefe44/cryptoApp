@@ -9,8 +9,6 @@ import { LineChart } from 'react-native-wagmi-charts';
 import { getCoinMarketChart, getDetailCoinData } from '../services/request';
 
 
-
-
 export const { width: SIZE } = Dimensions.get('window');
 
 const Detail = ({ route }) => {
@@ -33,7 +31,6 @@ const Detail = ({ route }) => {
     if (fetchedCoinMarketData) {
       setCoinMarketData(fetchedCoinMarketData);
     }
-
   };
   useEffect(() => {
     getCoinData(id)
