@@ -18,7 +18,6 @@ const Detail = ({ route }) => {
   const [coinMarketData, setCoinMarketData] = useState(null);
   const [selectedRange, setSelectedRange] = useState("1");
 
-
   const getCoinData = async (coinId) => {
     const data = await getDetailCoinData(coinId)
     if (data) {
@@ -51,19 +50,14 @@ const Detail = ({ route }) => {
     if (coinData?.market_data?.current_price?.usd < 1) {
       return `$${parseFloat(value)}`;
     }
-    return `$${parseFloat(value).toFixed(2)}`;
-  };
 
-  const {
-    image: { small },
-    name,
-    symbol,
-    market_data: { market_cap_rank, current_price, price_change_24h },
-  } = Coin;
+    return `$${parseFloat(value).toFixed(2)}`;
+    
+  };
 
   const percentageColor =
     coinData?.market_data?.price_change_percentage_24h < 0 ? "#ea3943" : "#16c784" || "white";
-  const chartColor = current_price.usd > coinMarketData?.prices[0][1] ? "#16c784" : "#ea3943";
+  const chartColor = coinData?.market_data.current_price.usd > coinMarketData?.prices[0][1] ? "#16c784" : "#ea3943";
 
   const [coinValue, setCoinValue] = useState("")
   const [usdValue, setUsdValue] = useState(coinData?.market_data.current_price.usd)
@@ -132,7 +126,7 @@ const Detail = ({ route }) => {
 
 
 
-        <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', flexWrap: 'nowrap' }}>
+        <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center', flexWrap: 'nowrap', marginTop: 25, borderTopWidth: .8, borderTopColor: 'black', paddingVertical: 10 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <Text style={{ color: 'white' }}>{coinData?.symbol.toUpperCase()}</Text>
             <TextInput value={coinValue} onChangeText={(text) => changeCoinValue(text)} style={{ color: 'white', borderBottomWidth: .7, borderBottomColor: 'white', paddingHorizontal: 35 }}></TextInput>
